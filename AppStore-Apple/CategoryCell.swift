@@ -98,12 +98,10 @@ class AppCell: UICollectionViewCell {
                     print(imageName)
                     imageView.image = UIImage(named: imageName)
                 }
-                nameLabel.text = app.name
-                print("*********")
-                print(app.name)
-                print(app.category)
-                print(app.price)
-                 print("*********")
+                if let name = app.name {
+                    let rect = NSString(string: name).boundingRect(with: CGSize(width: frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12)], context: nil)
+                    nameLabel.text = app.name
+                }
                 categoryLabel.text = app.category
                 if let price = app.price {
                     priceLabeL.text = "$ \(price.stringValue)"
@@ -131,14 +129,14 @@ class AppCell: UICollectionViewCell {
     
     let categoryLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 9)
+        label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = UIColor.lightGray
         return label
     }()
     
     let priceLabeL: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 9)
+        label.font = UIFont.systemFont(ofSize: 11)
         label.textColor = UIColor.lightGray
         return label
     }()
@@ -156,7 +154,7 @@ class AppCell: UICollectionViewCell {
         imageView.frame = CGRect(x: 0, y: 0, width: frame.width, height: 150.0)
         nameLabel.frame = CGRect(x: 0, y: imageView.frame.height + 2, width: frame.width, height: 30)
         categoryLabel.frame = CGRect(x: 0, y: imageView.frame.height + 2 + nameLabel.frame.height + 1, width: frame.width, height: 10)
-        priceLabeL.frame = CGRect(x: 0, y: imageView.frame.height + 2 + nameLabel.frame.height + 1 + categoryLabel.frame.height + 1, width: frame.width, height: 10)
+        priceLabeL.frame = CGRect(x: 0, y: imageView.frame.height + 2 + nameLabel.frame.height + 1 + categoryLabel.frame.height + 2, width: frame.width, height: 10)
     }
     
     required init?(coder aDecoder: NSCoder) {
