@@ -28,7 +28,7 @@ class AppCategory: NSObject {
         }
     }
     
-    static func fetchFeaturedApps(completionHandler: @escaping ([AppCategory]) -> ()) {
+    static func fetchFeaturedApps(completionHandler: @escaping ([AppCategory], Banner?) -> ()) {
         let urlString = "http://www.statsallday.com/appstore/featured"
         if let url = URL(string: urlString) {
             print("Yay")
@@ -53,9 +53,14 @@ class AppCategory: NSObject {
                             } else {
                                 appCategories = []
                             }
+							var banner: Banner?
+							if let bannerCategory = dictionary["bannerCategory"] as? [String: Any] {
+								print(bannerCategory)
+								banner = Banner(data: bannerCategory)
+							}
                             
                             DispatchQueue.main.async {
-                                completionHandler(appCategories)
+                                completionHandler(appCategories, banner)
                             }
                             
                         }
@@ -89,4 +94,19 @@ class App: NSObject {
         self.price = price
         self.imageName = imageName
     }
+}
+
+class Banner: NSObject {
+	let imageNames: [String]? = []
+	
+	init?(data: [String: Any]) {
+		guard let appsCollection = data["apps"] as? [[String: Any]]  else {
+			return nil
+		}
+		for app in appsCollection {
+			if let imageName = app["ImageName"] as? String {
+				imageNames?.append(imageName)
+			}
+		}
+	}
 }

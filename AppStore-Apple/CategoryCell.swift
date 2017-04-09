@@ -9,6 +9,84 @@
 import Foundation
 import UIKit
 
+class LargeCategoryCell: CategoryCell {
+	
+	override func setupViews() {
+		super.setupViews()
+		appsCollectionView.register(LargeAppCell.self, forCellWithReuseIdentifier: "largeAppCell")
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "largeAppCell", for: indexPath) as! LargeAppCell
+		cell.app = category?.apps?[indexPath.item]
+		return cell
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+		return CGSize(width: 200, height: frame.height - 2 - 30)
+	}
+	
+	class LargeAppCell: AppCell {
+		override func setupViews() {
+			addSubview(imageView)
+			imageView.translatesAutoresizingMaskIntoConstraints = false
+			addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": imageView]))
+			addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-2-[v0]-2-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": imageView]))
+		}
+	}
+}
+
+class HeaderCell: CategoryCell {
+	
+	var banner: Banner? = nil {
+		didSet {
+			appsCollectionView.reloadData()
+		}
+	}
+	
+	override func setupViews() {
+		addSubview(appsCollectionView)
+		appsCollectionView.delegate = self
+		appsCollectionView.dataSource = self
+		appsCollectionView.register(BannerCell.self, forCellWithReuseIdentifier: "bannerCell")
+		addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": appsCollectionView]))
+		addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": appsCollectionView]))
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "bannerCell", for: indexPath) as! BannerCell
+		cell.imageView.image = UIImage(named: banner?.imageNames?[indexPath.item] ?? "")
+		return cell
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+		return CGSize(width: frame.width, height: frame.height)
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+		return banner?.imageNames?.count ?? 0
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+		return 0.0
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+		return UIEdgeInsets.zero
+	}
+	
+	class BannerCell: AppCell {
+		override func setupViews() {
+			imageView.layer.cornerRadius = 0.0
+			imageView.contentMode = .scaleAspectFit
+			imageView.translatesAutoresizingMaskIntoConstraints = false
+			addSubview(imageView)
+			addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": imageView]))
+			addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": imageView]))
+		}
+	}
+}
+
 class CategoryCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     var category: AppCategory? {
         didSet {
@@ -71,7 +149,7 @@ class CategoryCell: UICollectionViewCell, UICollectionViewDataSource, UICollecti
         return label
     }()
     
-    private func setupViews() {
+    func setupViews() {
         addSubview(appsCollectionView)
         addSubview(dividerView)
         addSubview(categoryHeading)
