@@ -88,6 +88,9 @@ class HeaderCell: CategoryCell {
 }
 
 class CategoryCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+	
+	var featuredAppController: FeaturedAppsController?
+	
     var category: AppCategory? {
         didSet {
             categoryHeading.text = category?.name
@@ -133,6 +136,12 @@ class CategoryCell: UICollectionViewCell, UICollectionViewDataSource, UICollecti
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 150, height: frame.height - 2 - 30)
     }
+	
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		if let selectedApp = category?.apps?[indexPath.item] {
+			featuredAppController?.presentAppDetail(app: selectedApp)
+		}
+	}
     
     let dividerView: UIView = {
         let view = UIView()
@@ -177,7 +186,7 @@ class AppCell: UICollectionViewCell {
                     imageView.image = UIImage(named: imageName)
                 }
                 if let name = app.name {
-                    let rect = NSString(string: name).boundingRect(with: CGSize(width: frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12)], context: nil)
+                    _ = NSString(string: name).boundingRect(with: CGSize(width: frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 12)], context: nil)
                     nameLabel.text = app.name
                 }
                 categoryLabel.text = app.category

@@ -23,7 +23,7 @@ class FeaturedAppsController: UICollectionViewController, UICollectionViewDelega
         
         collectionView?.dataSource = self
         collectionView?.delegate = self
-        //categories = AppCategory.samples()
+        
         AppCategory.fetchFeaturedApps { (appCategories, banner) in
             self.categories = appCategories
 			self.bannerContent = banner
@@ -44,11 +44,13 @@ class FeaturedAppsController: UICollectionViewController, UICollectionViewDelega
 		if indexPath.item == 2 {
 			let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "largeCategoryCell", for: indexPath) as! LargeCategoryCell
 			cell.category = categories[indexPath.item]
+			cell.featuredAppController = self
 			return cell
 		}
 		
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! CategoryCell
         cell.category = categories[indexPath.item]
+		cell.featuredAppController = self
         return cell
     }
     
@@ -68,6 +70,16 @@ class FeaturedAppsController: UICollectionViewController, UICollectionViewDelega
 		let headerCell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerCell", for: indexPath) as! HeaderCell
 		headerCell.banner = bannerContent
 		return headerCell
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		
+	}
+	
+	func presentAppDetail(app: App) {
+		print("category cell selected")
+		let appDetailViewController = AppDetailViewController(collectionViewLayout: UICollectionViewLayout())
+		navigationController?.pushViewController(appDetailViewController, animated: true)
 	}
 }
 

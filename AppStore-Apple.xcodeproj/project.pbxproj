@@ -15,6 +15,7 @@
 		E94D9A231E781EA700D6F508 /* AppStore_AppleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94D9A221E781EA700D6F508 /* AppStore_AppleTests.swift */; };
 		E94D9A2E1E781EA700D6F508 /* AppStore_AppleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94D9A2D1E781EA700D6F508 /* AppStore_AppleUITests.swift */; };
 		E963D2F61E83E74D0051A857 /* AppCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E963D2F51E83E74D0051A857 /* AppCategory.swift */; };
+		E98796571EA397C0004A05AC /* AppDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98796561EA397C0004A05AC /* AppDetailViewController.swift */; };
 		E9BA2D331E7AABAD005B3945 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BA2D321E7AABAD005B3945 /* CategoryCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		E94D9A2D1E781EA700D6F508 /* AppStore_AppleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore_AppleUITests.swift; sourceTree = "<group>"; };
 		E94D9A2F1E781EA700D6F508 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E963D2F51E83E74D0051A857 /* AppCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCategory.swift; sourceTree = "<group>"; };
+		E98796561EA397C0004A05AC /* AppDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDetailViewController.swift; sourceTree = "<group>"; };
 		E9BA2D321E7AABAD005B3945 /* CategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -109,6 +111,7 @@
 				E94D9A161E781EA700D6F508 /* LaunchScreen.storyboard */,
 				E94D9A191E781EA700D6F508 /* Info.plist */,
 				E9BA2D321E7AABAD005B3945 /* CategoryCell.swift */,
+				E98796561EA397C0004A05AC /* AppDetailViewController.swift */,
 			);
 			path = "AppStore-Apple";
 			sourceTree = "<group>";
@@ -277,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E94D9A101E781EA700D6F508 /* FeaturedAppsController.swift in Sources */,
+				E98796571EA397C0004A05AC /* AppDetailViewController.swift in Sources */,
 				E94D9A0E1E781EA700D6F508 /* AppDelegate.swift in Sources */,
 				E9BA2D331E7AABAD005B3945 /* CategoryCell.swift in Sources */,
 				E963D2F61E83E74D0051A857 /* AppCategory.swift in Sources */,
