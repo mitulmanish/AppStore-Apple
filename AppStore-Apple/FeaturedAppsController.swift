@@ -16,13 +16,12 @@ class FeaturedAppsController: UICollectionViewController, UICollectionViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+		title = "Featured"
         collectionView?.register(CategoryCell.self, forCellWithReuseIdentifier: "cellId")
 		collectionView?.register(LargeCategoryCell.self, forCellWithReuseIdentifier: "largeCategoryCell")
 		collectionView?.register(HeaderCell.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerCell")
         collectionView?.backgroundColor = UIColor.white
-        
-        collectionView?.dataSource = self
-        collectionView?.delegate = self
+
         
         AppCategory.fetchFeaturedApps { (appCategories, banner) in
             self.categories = appCategories
@@ -72,14 +71,11 @@ class FeaturedAppsController: UICollectionViewController, UICollectionViewDelega
 		return headerCell
 	}
 	
-	override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		
-	}
-	
 	func presentAppDetail(app: App) {
-		print("category cell selected")
-		let appDetailViewController = AppDetailViewController(collectionViewLayout: UICollectionViewLayout())
-		navigationController?.pushViewController(appDetailViewController, animated: true)
+		let layout = UICollectionViewFlowLayout()
+		let appDetailController = AppDetailController(collectionViewLayout: layout)
+		appDetailController.app = app
+		navigationController?.pushViewController(appDetailController, animated: true)
 	}
 }
 
