@@ -82,18 +82,21 @@ class App: NSObject {
     var category: String?
     var imageName: String?
     var price: NSNumber?
-    
+	var screenshots: [String]?
+	var appInformation: Any?
+	var desc: String?
+	
     override init() {
         
     }
-    
-    init(name: String, id: NSNumber, category: String, imageName: String, price: NSNumber) {
-        self.name = name
-        self.id = id
-        self.category = category
-        self.price = price
-        self.imageName = imageName
-    }
+	
+	override func setValue(_ value: Any?, forKey key: String) {
+		if key == "description" {
+			self.desc = value as? String
+		} else {
+			super.setValue(value, forKey: key)
+		}
+	}
 }
 
 class Banner: NSObject {

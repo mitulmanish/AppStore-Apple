@@ -1,25 +1,61 @@
 
 
 import UIKit
+import Foundation
 
 class AppDetailController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 	
-	var app: App?
+	var app: App? {
+		didSet {
+			if let appId = app?.id {
+				let urlString = "http://www.statsallday.com/appstore/appdetail?id=\(appId)"
+				if let url = URL(string: urlString) {
+					let urlRequest: URLRequest = URLRequest(url: url)
+					URLSession.shared.dataTask(with: urlRequest, completionHandler: { (data, response, error) in
+						if let error = error {
+							print(error.localizedDescription)
+							return
+						}
+						
+						if let data = data {
+							do {
+								if let dataDictionary = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+									print(dataDictionary)
+									let newApp = App()
+									newApp.setValuesForKeys(dataDictionary)
+									self.app = newApp
+									
+									DispatchQueue.main.async {
+										self.collectionView?.reloadData()
+									}
+								}
+							} catch {
+								
+							}
+						}
+					}).resume()
+				}
+			}
+		}
+	}
+	fileprivate let footerId = "footerId"
 	fileprivate let headerId = "headerId"
+	fileprivate let cellId = "cellId"
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
 		collectionView?.alwaysBounceVertical = true
-		
 		collectionView?.backgroundColor = UIColor.white
-		
 		collectionView?.register(AppDetailHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerId)
-		
-
+		collectionView?.register(FooterCell.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: footerId)
+		collectionView?.register(DetailImageCell.self, forCellWithReuseIdentifier: cellId)
 	}
 	
 	override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+		if kind == UICollectionElementKindSectionFooter {
+			let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footerId, for: indexPath)
+			return footer
+		}
 		let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! AppDetailHeader
 		header.app = self.app
 		return header
@@ -27,6 +63,24 @@ class AppDetailController: UICollectionViewController, UICollectionViewDelegateF
 	
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
 		return CGSize(width: view.frame.width, height: 170)
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+		return CGSize(width: view.frame.width, height: 250)
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+		return 1
+	}
+	
+	override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! DetailImageCell
+		cell.app = self.app
+		return cell
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+		return CGSize(width: view.frame.width, height: 150)
 	}
 }
 
@@ -109,20 +163,15 @@ class AppDetailHeader: BaseCell {
 		headerLabel.sizeToFit()
 		headerDescription.sizeToFit()
 	
-		// W
 		addConstraintsWithFormat("H:|-14-[v0(100)]-4-[v1]-4-|", views: headerImageView, headerLabel)
 		addConstraintsWithFormat("V:|-14-[v0(100)]", views: headerImageView)
 		addConstraintsWithFormat("V:|-14-[v0]", views: headerLabel, headerDescription)
 		addConstraintsWithFormat("H:[v0]-14-|", views: buyButton)
 		addConstraintsWithFormat("H:|[v0]|", views: divider)
 		addConstraintsWithFormat("V:[v0(0.5)]|", views: divider)
-		// W
 		
 		addConstraint(NSLayoutConstraint(item: headerDescription, attribute: .top, relatedBy: .equal, toItem: headerLabel, attribute: .bottom, multiplier: 1, constant: 2))
 		
-		
-		
-		// W
 		addConstraint(NSLayoutConstraint(item: headerDescription, attribute: .left, relatedBy: .equal, toItem: headerImageView, attribute: .right, multiplier: 1, constant: 6))
 		addConstraint(NSLayoutConstraint(item: headerDescription, attribute: .right, relatedBy: .equal, toItem: self, attribute: .rightMargin, multiplier: 1, constant: 4))
 		
